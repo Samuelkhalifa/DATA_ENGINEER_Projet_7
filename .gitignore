@@ -3,3 +3,4 @@
 
 # Sensible variables
 .env
+.dbt_profiles/
