@@ -47,4 +47,4 @@ while True:
         if quote:
             print(f"Producing: {quote}")
             producer.send("stock-quotes", value=quote)
-    time.sleep(20)
+    time.sleep(120)

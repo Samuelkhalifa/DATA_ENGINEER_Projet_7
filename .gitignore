@@ -1,6 +1,23 @@
 # Virtual environment
 .venv
 
+
 # Sensible variables
 .env
 .dbt_profiles/
+
+
+# Various files and directories
+logs/
+dbt/logs/
+dbt/dbt_packages/
+dbt/target/
+
+
+# Personnal files
+notes.txt
+
+
+# Cached files
+infra/airflow/dags/__pycache__/
+infra/airflow/functions/__pycache__/

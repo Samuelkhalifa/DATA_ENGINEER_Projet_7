@@ -51,6 +51,67 @@ services:
       MINIO_ROOT_PASSWORD: password123
     command: "server /data --console-address ':9001'"
 
+  airflow-webserver:
+    image: apache/airflow:2.9.3
+    container_name: airflow-webserver
+    restart: always
+    depends_on:
+      - airflow-scheduler
+      - postgres
+    env_file:
+      - ../.env
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: False
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      PIP ADDITIONAL_REQUIREMENTS: dbt-core dbt-snowflake
+      PYTHONPATH: /opt/airflow
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ../infra/airflow/functions:/opt/airflow/functions
+      - ../dbt:/opt/airflow/dbt
+      - ../dbt/.dbt_profiles:/opt/airflow/dbt/.dbt_profiles
+    ports:
+      - "8080:8080"
+    command: >
+      bash -c "
+      airflow db migrate && 
+      airflow users create --username $$AIRFLOW_USER --password $$AIRFLOW_PASSWORD --firstname admin --lastname admin --role Admin --email admin@example.com &&
+      airflow webserver
+      "
+
+  airflow-scheduler:
+    image: apache/airflow:2.9.3
+    container_name: airflow-scheduler
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: False
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      PIP ADDITIONAL_REQUIREMENTS: dbt-core dbt-snowflake
+      PYTHONPATH: /opt/airflow
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ../infra/airflow/functions:/opt/airflow/functions
+      - ../dbt:/opt/airflow/dbt
+      - ../dbt/.dbt_profiles:/opt/airflow/dbt/.dbt_profiles
+    command: "airflow scheduler"
+
+  postgres:
+    image: postgres:15
+    container_name: airflow-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
 volumes:
   kafka_data:
+  postgres_data:
