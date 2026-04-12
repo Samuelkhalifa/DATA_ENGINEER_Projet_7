@@ -31,14 +31,6 @@ def load_into_snowflake(**kwargs):
         return f.split("/")[-1].replace(".json", "")
 
 
-
-    print("______________________")
-    print(files_well_named)
-    print("______________________")
-    print(loaded_files_from_sf_well_named)
-    print("______________________")
-
-
     s3 = boto3.client(
         "s3",
         endpoint_url=MINIO_ENDPOINT,
