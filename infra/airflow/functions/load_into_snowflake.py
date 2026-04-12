@@ -20,7 +20,23 @@ def load_into_snowflake(**kwargs):
     BUCKET = os.getenv("BUCKET")
 
     loaded_files_from_sf = kwargs['ti'].xcom_pull(task_ids='get_loaded_files_from_snowflake')
+    loaded_files_from_sf_well_named = [f.split("/")[-1].replace(".json.gz", "") for f in loaded_files_from_sf]
+    
     files = kwargs['ti'].xcom_pull(task_ids='download_from_minio')
+    files_well_named = [f.split("/")[-1].replace(".json", "") for f in files]
+
+    #files_raw = files
+
+    def normalize(f):
+        return f.split("/")[-1].replace(".json", "")
+
+
+
+    print("______________________")
+    print(files_well_named)
+    print("______________________")
+    print(loaded_files_from_sf_well_named)
+    print("______________________")
 
 
     s3 = boto3.client(
@@ -45,7 +61,7 @@ def load_into_snowflake(**kwargs):
     TMP_DIR_PATH = f"/tmp/minio_downloads/"
     os.makedirs(TMP_DIR_PATH, exist_ok=True)   
 
-    for file in [f for f in files if f not in loaded_files_from_sf]:
+    for file in [f for f in files if normalize(f) not in loaded_files_from_sf_well_named]:
         ABS_FILE_PATH = os.path.abspath(os.path.join(TMP_DIR_PATH, os.path.basename(file)))
         s3.download_file(BUCKET, file, ABS_FILE_PATH)
         downloaded_files_to_ingest.append(ABS_FILE_PATH)
@@ -58,8 +74,13 @@ def load_into_snowflake(**kwargs):
         print(f"{df} successfully put into stage")
 
     cursor.execute(f"""
-        COPY INTO bronze_stock_quotes_raw (raw)
-        FROM @%bronze_stock_quotes_raw
+        COPY INTO bronze_stock_quotes_raw (raw, filename)
+        FROM (
+            SELECT
+                $1,
+                METADATA$FILENAME
+            FROM @%bronze_stock_quotes_raw
+        )
         FILE_FORMAT = (TYPE=JSON)
     """)
 

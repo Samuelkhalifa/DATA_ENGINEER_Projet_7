@@ -25,7 +25,7 @@ def get_loaded_files_from_snowflake():
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT raw
+        SELECT filename
         FROM bronze_stock_quotes_raw
     """)
 
