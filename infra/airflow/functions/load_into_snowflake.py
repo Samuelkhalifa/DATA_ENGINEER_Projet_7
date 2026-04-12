@@ -19,7 +19,9 @@ def load_into_snowflake(**kwargs):
     MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY")
     BUCKET = os.getenv("BUCKET")
 
+    loaded_files_from_sf = kwargs['ti'].xcom_pull(task_ids='get_loaded_files_from_snowflake')
     files = kwargs['ti'].xcom_pull(task_ids='download_from_minio')
+
 
     s3 = boto3.client(
         "s3",
@@ -38,16 +40,17 @@ def load_into_snowflake(**kwargs):
 
     cursor = conn.cursor()
 
-    downloaded_files =[]
+    downloaded_files_to_ingest =[]
+
     TMP_DIR_PATH = f"/tmp/minio_downloads/"
     os.makedirs(TMP_DIR_PATH, exist_ok=True)   
 
-    for file in files:
+    for file in [f for f in files if f not in loaded_files_from_sf]:
         ABS_FILE_PATH = os.path.abspath(os.path.join(TMP_DIR_PATH, os.path.basename(file)))
         s3.download_file(BUCKET, file, ABS_FILE_PATH)
-        downloaded_files.append(ABS_FILE_PATH)
+        downloaded_files_to_ingest.append(ABS_FILE_PATH)
         
-    for df in downloaded_files:
+    for df in downloaded_files_to_ingest:
         cursor.execute(f"""
             PUT file://{df} @%bronze_stock_quotes_raw
         """)

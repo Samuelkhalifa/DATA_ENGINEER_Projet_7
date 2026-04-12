@@ -4,6 +4,7 @@ from airflow.operators.bash import BashOperator
 from datetime import datetime, timedelta
 from functions.download_from_minio import download_from_minio
 from functions.load_into_snowflake import load_into_snowflake
+from functions.get_loaded_files_from_snowflake import get_loaded_files_from_snowflake
 
 
 default_args = {
@@ -28,12 +29,16 @@ with DAG(
         python_callable=download_from_minio
     )
     task2 = PythonOperator(
+        task_id="get_loaded_files_from_snowflake",
+        python_callable=get_loaded_files_from_snowflake
+    )
+    task3 = PythonOperator(
         task_id="load_into_snowflake",
         python_callable=load_into_snowflake
     )
-    task3 = BashOperator(
+    task4 = BashOperator(
         task_id="dbt_transformations",
         bash_command="cd /opt/airflow/dbt && dbt run --profiles-dir .dbt_profiles/"
     )
 
-    task1 >> task2 >> task3
+    task1 >> task2 >> task3 >> task4
