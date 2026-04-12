@@ -33,7 +33,7 @@ with DAG(
     )
     task3 = BashOperator(
         task_id="dbt_transformations",
-        bash_command="cd /dbt && dbt run --profiles-dir .dbt_profiles/"
+        bash_command="cd /opt/airflow/dbt && dbt run --profiles-dir .dbt_profiles/"
     )
 
     task1 >> task2 >> task3
