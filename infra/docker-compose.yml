@@ -66,8 +66,7 @@ services:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
       PIP_ADDITIONAL_REQUIREMENTS: dbt-core dbt-snowflake
-      PYTHONPATH: /opt/airflow
-
+      PYTHONPATH: /opt/airflow  # needed in order to make python reckognize a path where it can reach other modules/functions, in airflow container, referenced to DAG fucntionning
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ../infra/airflow/functions:/opt/airflow/functions
@@ -78,7 +77,7 @@ services:
     command: >
       bash -c "
       airflow db migrate && 
-      airflow users create --username $$AIRFLOW_USER --password $$AIRFLOW_PASSWORD --firstname admin --lastname admin --role Admin --email admin@example.com &&
+      airflow users create --username $$AIRFLOW_USER --password $$AIRFLOW_PASSWORD --firstname admin --lastname admin --role Admin --email admin@example.com && 
       airflow webserver
       "
 
@@ -96,7 +95,7 @@ services:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
       PIP_ADDITIONAL_REQUIREMENTS: dbt-core dbt-snowflake
-      PYTHONPATH: /opt/airflow
+      PYTHONPATH: /opt/airflow  # needed in order to make python reckognize a path where it can reach other modules/functions, in airflow container, referenced to DAG fucntionning
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ../infra/airflow/functions:/opt/airflow/functions
