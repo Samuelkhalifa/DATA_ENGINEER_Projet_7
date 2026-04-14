@@ -1,4 +1,4 @@
-def get_loaded_files_from_snowflake():
+def init_snowflake():
 
     import os
     import snowflake.connector
@@ -35,33 +35,26 @@ def get_loaded_files_from_snowflake():
 
     # SQL writing to query snowflake database and see all already-loaded files
     cursor.execute("""
-        SELECT filename
-        FROM bronze_stock_quotes_raw
+        CREATE DATABASE IF NOT EXISTS stock_quotes_db
     """)
 
+    cursor.execute("""
+        USE stock_quotes_db;
+    """)
 
-    # new variables
-    loaded_files = cursor.fetchall()
-    loaded_files_from_sf = []
+    cursor.execute("""
+        CREATE SCHEMA IF NOT EXISTS stock_quotes_db.common;
+    """)
 
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS stock_quotes_db.common.bronze_stock_quotes_raw(
+            raw VARIANT,
+            loaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+            filename STRING
+        );
+    """)
 
-    # loop to fill "loaded_files_from_sf"
-    for loaded_file in loaded_files:
-        loaded_files_from_sf.append(loaded_file[0])
-
-    
     # closing SQL writing necessary lines
     conn.commit()
     cursor.close()
     conn.close()
-
-
-    return loaded_files_from_sf
-
-
-
-
-
-
-
-

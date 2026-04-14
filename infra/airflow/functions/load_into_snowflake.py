@@ -105,5 +105,6 @@ def load_into_snowflake(**kwargs):
 
 
     # closing SQL writing necessary lines
+    conn.commit()
     cursor.close()
     conn.close()
