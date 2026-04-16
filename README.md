@@ -16,6 +16,21 @@ https://www.youtube.com/watch?v=JCDrvXwh4BQ&t=9078s
 ![Airflow](https://img.shields.io/badge/Airflow-017CEE?style=for-the-badge&logo=Apache%20Airflow&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
+<br>
 
+## [Subject : Build a complete ETL-process and data pipeline by using kafka streaming, containerization with Docker and Airflow orchestration, to serve finnhub-API market quotes data]
 
 <br>
+
+## &#x1F4DD; Project graph
+
+<br>
+
+<p align="center";>
+  <img width="943" height="326" alt="Capture d’écran 2026-04-16 à 21 48 42" 
+  src="https://github.com/user-attachments/assets/9d1e671c-2f6e-456a-ade5-b5d49ffd8015" />
+</p>
+
+<br>
+
+## &#127919; Project steps
