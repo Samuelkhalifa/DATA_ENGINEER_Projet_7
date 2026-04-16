@@ -21,7 +21,7 @@ https://www.youtube.com/watch?v=JCDrvXwh4BQ&t=9078s
 
 <br>
 
-## [Subject : Build a complete ETL-process and data pipeline by using kafka streaming, containerization with Docker and Airflow orchestration, to serve finnhub-API market quotes data]
+## [Subject : Build a complete ELT-process and data pipeline by using kafka streaming, containerization with Docker and Airflow orchestration, to serve finnhub-API market quotes data]
 
 <br>
 
@@ -125,7 +125,5 @@ python infra/kafka/producer producer.py
 Go to `localhost:9001` to monitor your `minIO` and see your storage results from kafka streaming.
 
 Go to `localhost:8080` to trigger your `Airflow` dag and start orchestrationg to get the minIO into snowflake and transform it by dbt.
-
-Go to `localhost:8080` to trigger your `Airflow` dag and start orchestrationg ELT process.
 
 Go to `localhost:8080` to trigger your `Airflow` dag and start orchestrationg ELT process.
