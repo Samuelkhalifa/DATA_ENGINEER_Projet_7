@@ -42,7 +42,8 @@ https://www.youtube.com/watch?v=JCDrvXwh4BQ&t=9078s
 
   * Retrieve data from finnhub-API.
   * Transform data with `Python`.
-  * Set up docker with a docker-compose.yml file and configurate all necessary services (`Kafka`and `Zookeeper` for streaming, `airflow` webserver and scheduler for orchestration.
+  * Set up docker with a docker-compose.yml file and configurate all necessary services (`Kafka`and `Zookeeper` for streaming, also a kafka UI `kafdrop`, `airflow` webserver and scheduler for orchestration.
+  * Initialize dbt and writes SQL queries for bronze, silver, and gold transformation to get production-ready data.
   * Activate airflow dag to make data travel from API source to snowflake, and transform it with `dbt`.
 
 <br>
@@ -53,19 +54,52 @@ https://www.youtube.com/watch?v=JCDrvXwh4BQ&t=9078s
 
 `Git clone` the project and get inside, to project root.
   ```bash
-  git clone <repository-url> 
-  cd 
+  git clone <repository-url> market-quotes-data-pipeline
+  cd market-quotes-data-pipeline
   ```
 <br>
 
-Write into a `env.` file your personal API key.
+Create and virtual environment
+  ```bash
+  python -m venv .venv
+  source .venv/bin/activate  # (Mac/Linux)
+  venv\Scripts\activate      # (Windows)
+  ```
+
+<br>
+
+Install necessay packages written in requirement file
+  ```bash
+  pip install -r requirements.txt
+  ```
+
+<br>
+
+Write into a `env.` file your personal API key and credentials.
   ```bash
   touch .env # (for Mac)
   ```
   ```dotenv
+  API_KEY=""
+
+  MINIO_ENDPOINT="http://minio:9000"
+  MINIO_ACCESS_KEY=""
+  MINIO_SECRET_KEY=""
+  BUCKET=""
+  
+  SNOWFLAKE_USER=""
+  SNOWFLAKE_PASSWORD=""
+  SNOWFLAKE_ACCOUNT=""
+  SNOWFLAKE_WAREHOUSE="" 
+  SNOWFLAKE_DB=""
+  SNOWFLAKE_SCHEMA=""
+  
+  AIRFLOW_USER=  # with no quotes
+  AIRFLOW_PASSWORD=  # with no quotes
   ```
 
 <br>
+
 
 Enable `docker` by running the `docker-compose` file, which will create all necessary services, volumes and networks.
   ```bash
@@ -73,5 +107,10 @@ Enable `docker` by running the `docker-compose` file, which will create all nece
   ```
 <br>
 
+Go to `localhost:8080` to trigger your `Airflow` dag and start orchestrationg ELT process.
 
-Go to `localhost:8080` to trigger your `Airflow` dag and start orchestrationg ETL process.
+Go to `localhost:8080` to trigger your `Airflow` dag and start orchestrationg ELT process.
+
+Go to `localhost:8080` to trigger your `Airflow` dag and start orchestrationg ELT process.
+
+Go to `localhost:8080` to trigger your `Airflow` dag and start orchestrationg ELT process.
