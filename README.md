@@ -101,15 +101,30 @@ Write into a `env.` file your personal API key and credentials.
 <br>
 
 
-Enable `docker` by running the `docker-compose` file, which will create all necessary services, volumes and networks.
+Enable `docker` by running `start.sh`. Then the `docker-compose` file will be activated and will create all necessary services, volumes and networks.
   ```bash
-  docker-compose up
+  chmod +x init start.sh
+  ./start.sh
   ```
+
 <br>
 
-Go to `localhost:8080` to trigger your `Airflow` dag and start orchestrationg ELT process.
+Activate the Kafka consumer file, which will listen for next-activated kafka producer file
+```bash
+python infra/kafka/consumer consumer.py
+```
 
-Go to `localhost:8080` to trigger your `Airflow` dag and start orchestrationg ELT process.
+<br>
+
+Activate now the Kafka producer file
+```bash
+python infra/kafka/producer producer.py
+```
+
+
+Go to `localhost:9001` to monitor your `minIO` and see your storage results from kafka streaming.
+
+Go to `localhost:8080` to trigger your `Airflow` dag and start orchestrationg to get the minIO into snowflake and transform it by dbt.
 
 Go to `localhost:8080` to trigger your `Airflow` dag and start orchestrationg ELT process.
 
