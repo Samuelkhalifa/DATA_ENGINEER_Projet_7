@@ -37,3 +37,41 @@ https://www.youtube.com/watch?v=JCDrvXwh4BQ&t=9078s
 <br>
 
 ## &#127919; Project steps
+
+<br>
+
+  * Retrieve data from finnhub-API.
+  * Transform data with `Python`.
+  * Set up docker with a docker-compose.yml file and configurate all necessary services (`Kafka`and `Zookeeper` for streaming, `airflow` webserver and scheduler for orchestration.
+  * Activate airflow dag to make data travel from API source to snowflake, and transform it with `dbt`.
+
+<br>
+
+## &#128640; Project setup and activation
+
+<br>
+
+`Git clone` the project and get inside, to project root.
+  ```bash
+  git clone <repository-url> 
+  cd 
+  ```
+<br>
+
+Write into a `env.` file your personal API key.
+  ```bash
+  touch .env # (for Mac)
+  ```
+  ```dotenv
+  ```
+
+<br>
+
+Enable `docker` by running the `docker-compose` file, which will create all necessary services, volumes and networks.
+  ```bash
+  docker-compose up
+  ```
+<br>
+
+
+Go to `localhost:8080` to trigger your `Airflow` dag and start orchestrationg ETL process.
