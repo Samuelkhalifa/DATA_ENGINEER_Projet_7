@@ -1,6 +1,6 @@
 Project in the context of Data Engineering self-learning and inspired by Jay61616 with : <br>
 github repo : <br>
-https://github.com/chiranjeevi-sagi/weather-data-pipeline/ and <br>
+https://github.com/Jay61616/real-time-stocks-mds and <br>
 YouTube video : <br>
 https://www.youtube.com/watch?v=JCDrvXwh4BQ&t=9078s
 
@@ -27,8 +27,8 @@ https://www.youtube.com/watch?v=JCDrvXwh4BQ&t=9078s
 <br>
 
 <p align="center";>
-  <img width="943" height="326" alt="Capture d’écran 2026-04-16 à 21 48 42" 
-  src="https://github.com/user-attachments/assets/9d1e671c-2f6e-456a-ade5-b5d49ffd8015" />
+  <img width="1219" height="419" alt="Capture d’écran 2026-04-16 à 22 06 24" 
+  src="https://github.com/user-attachments/assets/c3cb21e4-798e-42d7-82b3-79c3b9e2748c" />
 </p>
 
 <br>
