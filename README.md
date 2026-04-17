@@ -18,6 +18,8 @@ https://www.youtube.com/watch?v=JCDrvXwh4BQ&t=9078s
 ![Snowflake](https://img.shields.io/badge/Snowflake-29B5E8?style=for-the-badge&logo=snowflake&logoColor=white)
 ![Apache Kafka](https://img.shields.io/badge/Apache%20Kafka-231F20?style=for-the-badge&logo=apachekafka&logoColor=white)
 ![dbt](https://img.shields.io/badge/dbt-FF694B?style=for-the-badge&logo=dbt&logoColor=white)
+![MinIO](https://img.shields.io/badge/MinIO-C72E49?style=for-the-badge&logo=minio&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 
 <br>
 
@@ -30,8 +32,8 @@ https://www.youtube.com/watch?v=JCDrvXwh4BQ&t=9078s
 <br>
 
 <p align="center";>
-  <img width="1219" height="419" alt="Capture d’écran 2026-04-16 à 22 06 24" 
-  src="https://github.com/user-attachments/assets/c3cb21e4-798e-42d7-82b3-79c3b9e2748c" />
+  <img width="1036" height="471" alt="Capture d’écran 2026-04-17 à 11 39 54" 
+  src="https://github.com/user-attachments/assets/1c16e3e6-2ccb-4d9e-83e8-913045a3e66b" />
 </p>
 
 <br>
@@ -40,11 +42,12 @@ https://www.youtube.com/watch?v=JCDrvXwh4BQ&t=9078s
 
 <br>
 
-  * Retrieve data from finnhub-API.
-  * Transform data with `Python`.
-  * Set up docker with a docker-compose.yml file and configurate all necessary services (`Kafka`and `Zookeeper` for streaming, also a kafka UI `kafdrop`, `airflow` webserver and scheduler for orchestration.
+  * Retrieve data from finnhub-API, with `Python`, inside the kafka producer and configure kafka consumer.
+  * Set up docker with a docker-compose.yml file and configurate all necessary services (`Kafka`and `Zookeeper` for streaming, also a kafka UI `kafdrop`, `minIO` for initial bucket storage, `airflow` webserver and scheduler for orchestration, linked with a `postresql` database.
   * Initialize dbt and writes SQL queries for bronze, silver, and gold transformation to get production-ready data.
-  * Activate airflow dag to make data travel from API source to snowflake, and transform it with `dbt`.
+  * Write airflow dag's tasks to orchestrate the ELT process.
+  * Run docker-compose to start data collect and bucket storage.
+  * Trigger airflow dag to make data travel from API source to snowflake, and transform it with `dbt`.
 
 <br>
 
@@ -55,20 +58,22 @@ https://www.youtube.com/watch?v=JCDrvXwh4BQ&t=9078s
 `Git clone` the project and get inside, to project root.
   ```bash
   git clone <repository-url> market-quotes-data-pipeline
+
   cd market-quotes-data-pipeline
   ```
 <br>
 
-Create and virtual environment
+Create a virtual environment
   ```bash
   python -m venv .venv
+
   source .venv/bin/activate  # (Mac/Linux)
   venv\Scripts\activate      # (Windows)
   ```
 
 <br>
 
-Install necessay packages written in requirement file
+Install necessary packages written in requirements file
   ```bash
   pip install -r requirements.txt
   ```
@@ -104,6 +109,7 @@ Write into a `env.` file your personal API key and credentials.
 Enable `docker` by running `start.sh`. Then the `docker-compose` file will be activated and will create all necessary services, volumes and networks.
   ```bash
   chmod +x init start.sh
+
   ./start.sh
   ```
 
@@ -121,9 +127,31 @@ Activate now the Kafka producer file
 python infra/kafka/producer producer.py
 ```
 
+<br>
 
-Go to `localhost:9001` to monitor your `minIO` and see your storage results from kafka streaming.
+Go to `localhost:9001` to monitor your `minIO` bucket storage results from kafka streaming.
 
-Go to `localhost:8080` to trigger your `Airflow` dag and start orchestrationg to get the minIO into snowflake and transform it by dbt.
+Go to `localhost:9000` to monitor your `kafdrop` topics and other kafka activities.
 
-Go to `localhost:8080` to trigger your `Airflow` dag and start orchestrationg ELT process.
+Go to `localhost:8080` to trigger your `Airflow` dag and start orchestration to get the minIO into snowflake and transform it by dbt.
+
+<br>
+
+Go to `snowflake` plateform to manage your results.
+
+  ```SQL
+  USE <DATABASE>; # enable the database using
+
+  TRUNCATE <TABLE>; # delete table to start from zero (if you retry)
+
+  LIST @%<TABLE>; # be sure the stage table is empty (if you retry)
+
+  SELECT * FROM <TABLE>;
+  SELECT * FROM <VIEW>;
+  ```
+
+<br>
+
+Open the `dashboard/.pbix` file.
+
+Connect `Power Bi` to your `snowflake` database to use the dashboard.
