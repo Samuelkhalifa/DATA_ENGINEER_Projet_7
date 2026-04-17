@@ -108,7 +108,7 @@ Write into a `env.` file your personal API key and credentials.
 
 Enable `docker` by running `start.sh`. Then the `docker-compose` file will be activated and will create all necessary services, volumes and networks.
   ```bash
-  chmod +x init start.sh
+  chmod +x start.sh  # make the file executable
 
   ./start.sh
   ```
@@ -155,3 +155,12 @@ Go to `snowflake` plateform to manage your results.
 Open the `dashboard/.pbix` file.
 
 Connect `Power Bi` to your `snowflake` database to use the dashboard.
+
+<br>
+
+Close the process by running `stop.sh` file, which will remove all docker images, volumes and networks.
+  ```bash
+  chmod +x stop.sh  # make the file executable
+
+  ./stop.sh  
+  ```
